@@ -1,0 +1,45 @@
+############################################################
+#
+# eureka 服务
+# web访问端口号  约定：7111
+#
+############################################################
+server:
+  port: 7111
+  tomcat:
+    uri-encoding: UTF-8
+
+############################################################
+#
+# 配置项目信息
+#
+############################################################
+spring:
+  application:
+    name: eureka
+  zipkin:
+    # 配置zipkin采集的服务地址，数据发送到哪里
+    base-url: http://localhost:9411/
+    sender:
+      # 数据传输方式，通过web http形式
+      type: web
+    sleuth:
+      sampler:
+        # 设定采样比例，0~1
+        probability: 1
+
+eureka:
+  instance:
+    hostname: localhost   # eureka-server实例
+#    hostname: eureka    # 也可以通过switchHost配置
+  client:
+    # 是否要把当前server注册（都行）
+    register-with-eureka: false
+    # 从注册中心查询检索服务实例，server的话没必要，直接false
+    fetch-registry: false
+    service-url:
+      # 单实例配置自己的服务地址，高可用则配置其他服务的地址
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enable-self-preservation: false   # 关闭eureka的自我保护功能
+    eviction-interval-timer-in-ms: 5000   # 清理无效节点的时间，缩短一点，默认60s

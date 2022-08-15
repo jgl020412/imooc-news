@@ -1,0 +1,40 @@
+############################################################
+#
+# eureka 集群的注册中心
+# web访问端口号  约定：7001~7003
+#
+############################################################
+server:
+  port: ${port:7001}
+  tomcat:
+    uri-encoding: UTF-8
+
+############################################################
+#
+# 配置项目信息
+#
+############################################################
+spring:
+  application:
+    name: springcloud-eureka-cluster
+
+############################################################
+#
+# eureka 配置信息
+#
+############################################################
+eureka:
+  instance:
+    hostname: eureka-cluster-${server.port}    # 集群中每个eureka的名字都要唯一
+  # 自定义eureka集群中另外的两个端口号
+  other-node-port2: ${p2:7002}
+  other-node-port3: ${p3:7003}
+  client:
+    #    register-with-eureka: false
+    #    fetch-registry: false
+    service-url:
+      # 集群中的每个eureka单实例，都需要相互注册到其他的节点，在此填入集群中其他eureka的地址进行相互注册
+      defaultZone: http://eureka-cluster-${eureka.other-node-port2}:${eureka.other-node-port2}/eureka/,http://eureka-cluster-${eureka.other-node-port3}:${eureka.other-node-port3}/eureka/
+  server:
+    enable-self-preservation: false   # 关闭eureka的自我保护功能
+    eviction-interval-timer-in-ms: 5000   # 清理无效节点的时间，缩短一点，默认60s
