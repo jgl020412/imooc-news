@@ -1,0 +1,16 @@
+server:
+  port: 8105
+spring:
+  redis:
+    database: 1
+    host: VMware
+    port: 6379
+    password: 123456
+
+# dev 开发环境开启mybatis日志
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+website:
+  domain-name: imoocnews.com
