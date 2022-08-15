@@ -1,0 +1,59 @@
+############################################################
+#
+# config 服务
+# web访问端口号  约定：7080
+#
+############################################################
+server:
+  port: 7080
+  tomcat:
+    uri-encoding: UTF-8
+
+############################################################
+#
+# 配置项目信息
+#
+############################################################
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/jgl020412/config.git
+  redis:
+    database: 1
+    host: 192.168.247.148
+    port: 6379
+    password: 123456
+  rabbitmq:
+    host: 192.168.247.148
+    port: 5672
+    username: jgl
+    password: 123456
+    virtual-host: imooc-news
+
+
+############################################################
+#
+# eureka client 配置信息
+#
+############################################################
+eureka:
+  server:
+    hostname: localhost
+    port: 7111
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.server.hostname}:${eureka.server.port}/eureka/
+#      defaultZone: http://eureka-cluster-7001:7001/eureka/,http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7003:7003/eureka/
+
+# 配置动态刷新
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
