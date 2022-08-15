@@ -1,0 +1,66 @@
+############################################################
+#
+# 文件微服务
+# web访问端口号  约定：8004
+#
+############################################################
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1  # tomcat默认大小2M，超过2M的文件不会被捕获，需要调整此处大小为100MB或者-1即可
+
+############################################################
+#
+# 配置项目信息
+#
+############################################################
+spring:
+  profiles:
+    active: dev
+  application:
+    name: service-files
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 5120000   # 请求的文件大小限制为5000kb
+      max-request-size: 5120000
+  data:
+    mongodb:
+      uri: mongodb://root:123456@VMware:27017
+      database: imooc-news
+
+
+############################################################
+#
+# fastdfs 配置信息
+#
+############################################################
+fdfs:
+  connect-timeout: 30  # 连接的超时时间
+  so-timeout: 30       # 读取的超时时间
+  tracker-list: VMware:22122
+
+############################################################
+#
+# eureka client 配置
+#
+############################################################
+eureka:
+  # 自定义eureka
+  server:
+    hostname: localhost
+    port: 7111
+  client:
+    # 所有微服务都必须注册到eureka中
+    register-with-eureka: true
+    # 从注册中心查询检索服务实例
+    fetch-registry: true
+    service-url:
+      # 注册中心的地址，表示我当前微服务要登记户口到指定的派出所
+      #      defaultZone: http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7003:7003/eureka/
+      defaultZone: http://${eureka.server.hostname}:${eureka.server.port}/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 3
+    lease-expiration-duration-in-seconds: 5

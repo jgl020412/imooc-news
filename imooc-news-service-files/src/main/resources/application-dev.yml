@@ -1,0 +1,9 @@
+server:
+  port: 8004
+
+spring:
+  redis:
+    database: 1
+    host: VMware
+    port: 6379
+    password: 123456
