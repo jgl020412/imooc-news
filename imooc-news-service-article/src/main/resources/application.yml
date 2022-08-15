@@ -1,0 +1,151 @@
+############################################################
+#
+# article微服务
+# web访问端口号  约定：8001
+#
+############################################################
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1  # tomcat默认大小2M，超过2M的文件不会被捕获，需要调整此处大小为100MB或者-1即可
+
+############################################################
+#
+# 配置项目信息
+#
+############################################################
+spring:
+  profiles:
+    active: dev
+  application:
+    name: service-article
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:                                         # 数据源的相关配置
+    type: com.zaxxer.hikari.HikariDataSource          # 数据源类型：HikariCP
+    driver-class-name: com.mysql.jdbc.Driver          # mysql驱动
+    url: jdbc:mysql://localhost:3306/imooc-news?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: 123456
+    hikari:
+      connection-timeout: 30000       # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 默认:30秒
+      minimum-idle: 5                 # 最小连接数
+      maximum-pool-size: 20           # 最大连接数
+      auto-commit: true               # 自动提交
+      idle-timeout: 600000            # 连接超时的最大时长（毫秒），超时则被释放（retired），默认:10分钟
+      pool-name: DateSourceHikariCP     # 连接池名字
+      max-lifetime: 1800000           # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认:30分钟 1800000ms
+      connection-test-query: SELECT 1
+  data:
+    mongodb:
+      uri: mongodb://root:123456@VMware:27017
+      database: imooc-news
+    elasticsearch:
+      rest:
+        uris: VMware:9200
+      cluster-name: imooc-news-elastsearch
+      cluster-nodes: VMware:9300
+  freemarker:
+    charset: UTF-8
+    content-type: text/html
+    suffix: .ftl
+    template-loader-path: classpath:/templates/
+  rabbitmq:
+    host: VMware
+    port: 5672
+    username: jgl
+    password: 123456
+    virtual-host: imooc-news
+  zipkin:
+    # 配置zipkin采集的服务地址，数据发送到哪里
+    base-url: http://localhost:9411/
+    sender:
+      # 数据传输方式，通过web http形式
+      type: web
+    sleuth:
+      sampler:
+        # 设定采样比例，0~1
+        probability: 1
+
+############################################################
+#
+# mybatis 配置
+#
+############################################################
+mybatis:
+  type-aliases-package: com.imooc.pojo          # 所有POJO类所在包路径
+  mapper-locations: classpath:mapper/*.xml      # mapper映射文件
+
+
+############################################################
+#
+# mybatis mapper 配置
+#
+############################################################
+# 通用 Mapper 配置
+mapper:
+  mappers: com.imooc.my.mapper.MyMapper
+  not-empty: false    # 在进行数据库操作的的时候，判断表达式 username != null, 是否追加 username != ''
+  identity: MYSQL
+# 分页插件配置
+pagehelper:
+  helperDialect: mysql
+  supportMethodsArguments: true
+
+# 定义freemarker生成的html位置
+freemarker:
+  html:
+    article: D:\Tomcat\apache-tomcat-8.5.75\webapps\imooc-news\portal\a
+
+############################################################
+#
+# eureka client 配置
+#
+############################################################
+eureka:
+  # 自定义eureka
+  server:
+    hostname: localhost
+    port: 7111
+  client:
+    # 所有微服务都必须注册到eureka中
+    register-with-eureka: true
+    # 从注册中心查询检索服务实例
+    fetch-registry: true
+    service-url:
+      # 注册中心的地址，表示我当前微服务要登记户口到指定的派出所
+#      defaultZone: http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7003:7003/eureka/
+      defaultZone: http://${eureka.server.hostname}:${eureka.server.port}/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 3
+    lease-expiration-duration-in-seconds: 5
+
+# 设置服务负载均衡方式
+#SERVICE-USER:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+# 设置服务重试相关信息
+#ribbon:
+#  ConnectTimeout: 5000
+#  ReadTimeout: 5000
+#  MaxAutoRetries: 1
+#  MaxAutoRetriesNextServer: 2
+
+logging:
+  level:
+    com.imooc.api.controller.user.UserControllerApi: debug
+
+feign:
+  client:
+    config:
+      SERVICE-USER:
+        loggerLevel: FULL
+  hystrix:
+    enabled: true
+
+#management:
+#  health:
+#    elasticsearch:
+#      enabled: false
