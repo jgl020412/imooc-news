@@ -2,7 +2,6 @@ package com.imooc.user.controller;
 
 import com.imooc.api.BaseInfoProperties;
 import com.imooc.api.controller.user.MyFansControllerApi;
-import com.imooc.enums.Sex;
 import com.imooc.grace.result.GraceJSONResult;
 import com.imooc.grace.result.ResponseStatusEnum;
 import com.imooc.pojo.vo.FansCountsVO;

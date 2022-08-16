@@ -49,10 +49,12 @@ spring:
         probability: 1
   data:
     elasticsearch:
-      rest:
-        uris: VMware:9200
+      host: VMware
+      port: 9200
       cluster-name: imooc-news-elastsearch
       cluster-nodes: VMware:9300
+  zookeeper:
+    connect-string: VMware:2181
 
 ############################################################
 #
@@ -93,20 +95,20 @@ hystrix:
 # eureka client 配置
 #
 ############################################################
-eureka:
-  # 自定义eureka
-  server:
-    hostname: localhost
-    port: 7111
-  client:
-    # 所有微服务都必须注册到eureka中
-    register-with-eureka: true
-    # 从注册中心查询检索服务实例
-    fetch-registry: true
-    service-url:
-      # 注册中心的地址，表示我当前微服务要登记户口到指定的派出所
-      #      defaultZone: http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7003:7003/eureka/
-      defaultZone: http://${eureka.server.hostname}:${eureka.server.port}/eureka/
-  instance:
-    lease-renewal-interval-in-seconds: 3
-    lease-expiration-duration-in-seconds: 5
+#eureka:
+#  # 自定义eureka
+#  server:
+#    hostname: localhost
+#    port: 7111
+#  client:
+#    # 所有微服务都必须注册到eureka中
+#    register-with-eureka: true
+#    # 从注册中心查询检索服务实例
+#    fetch-registry: true
+#    service-url:
+#      # 注册中心的地址，表示我当前微服务要登记户口到指定的派出所
+#      #      defaultZone: http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7003:7003/eureka/
+#      defaultZone: http://${eureka.server.hostname}:${eureka.server.port}/eureka/
+#  instance:
+#    lease-renewal-interval-in-seconds: 3
+#    lease-expiration-duration-in-seconds: 5

@@ -1,0 +1,48 @@
+server:
+  port: 8700
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1  # tomcat默认大小2M，超过2M的文件不会被捕获，需要调整此处大小为100MB或者-1即可
+
+############################################################
+#
+# 配置项目信息
+#
+############################################################
+spring:
+  application:
+    name: springcloud-my-gateway
+  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 192.168.1.159:8848   # nacos 所在地址
+    zookeeper:
+      connect-string: VMware:2181
+    gateway:
+      discovery:
+        locator:
+          enabled: true       # 开启动态路由，从注册中心根据微服务名称获得目标节点
+      routes:
+        - id: articleRoute    # 路由id，可以自定义，保证全局唯一
+          uri: lb://service-article        # lb 代表负载均衡，会动态寻址
+          predicates: # 匹配断言，符合条件的则放行（可以精确到具体的接口名）
+            - Path=/**
+        - id: adminRoute    # 路由id，可以自定义，保证全局唯一
+          uri: lb://service-admin        # lb 代表负载均衡，会动态寻址
+          predicates: # 匹配断言，符合条件的则放行（可以精确到具体的接口名）
+            - Path=/**
+        - id: userRoute    # 路由id，可以自定义，保证全局唯一
+          uri: lb://service-user        # lb 代表负载均衡，会动态寻址
+          predicates: # 匹配断言，符合条件的则放行（可以精确到具体的接口名）
+            - Path=/**
+        - id: filesRoute    # 路由id，可以自定义，保证全局唯一
+          uri: lb://service-files        # lb 代表负载均衡，会动态寻址
+          predicates: # 匹配断言，符合条件的则放行（可以精确到具体的接口名）
+            - Path=/**
+
+# 打开监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

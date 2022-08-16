@@ -17,10 +17,11 @@
         <module>imooc-news-service-admin</module>
         <module>imooc-news-service-article</module>
         <module>imooc-news-service-article-html</module>
-        <module>springcloud-eureka</module>
-        <module>springcloud-eureka-cluster</module>
-        <module>springcloud-zuul</module>
-        <module>springcloud-config</module>
+<!--        <module>springcloud-eureka</module>-->
+<!--        <module>springcloud-eureka-cluster</module>-->
+<!--        <module>springcloud-zuul</module>-->
+<!--        <module>springcloud-config</module>-->
+        <module>springcloud-gateway</module>
     </modules>
 
     <packaging>pom</packaging>
